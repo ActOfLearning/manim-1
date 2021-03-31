@@ -1,5 +1,6 @@
 import numpy as np
 
+from .. import logger
 from ..constants import *
 from ..mobject.mobject import Mobject
 from ..mobject.types.opengl_vectorized_mobject import (
@@ -87,7 +88,7 @@ class OpenGLTipableVMobject(OpenGLVMobject):
         Returns a tip that has been stylistically configured,
         but has not yet been given a position in space.
         """
-        config = dict()
+        config = {}
         config.update(self.tip_config)
         config.update(kwargs)
         return OpenGLArrowTip(**config)
@@ -341,7 +342,13 @@ class OpenGLDot(OpenGLCircle):
 
 
 class OpenGLSmallDot(OpenGLDot):
+    """ Deprecated"""
+
     def __init__(self, radius=DEFAULT_SMALL_DOT_RADIUS, **kwargs):
+        logger.warning(
+            "OpenGLSmallDot has been deprecated and will be removed in a future release."
+            "Use OpenGLDot instead."
+        )
         super().__init__(radius=radius, **kwargs)
 
 
