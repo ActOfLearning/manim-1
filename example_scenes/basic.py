@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from manim import *
+import os
 
 # To watch one of these scenes, run the following:
 # python --quality m manim example_scenes.py SquareToCircle -p
@@ -130,3 +131,12 @@ class UpdatersExample(Scene):
 
 
 # See many more examples at https://docs.manim.community/en/stable/examples.html
+
+if __name__ == "__main__":
+    module_name = os.path.abspath(__file__)
+    output_location = "C:\ManimCE\media"
+    clear_cmd = "cls"
+    #command_A = "manim " + module_name + " " + "RealCase" + " " + "-pql -n 42" + " --media_dir " + output_location
+    command_A = "manim " + module_name + " --media_dir " + output_location + " -apql"
+    os.system(clear_cmd)
+    os.system(command_A)
