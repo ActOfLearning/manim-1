@@ -4,31 +4,27 @@
 __all__ = ["Scene"]
 
 
-import inspect
-import random
-import warnings
-import platform
 import copy
-import string
+import inspect
+import platform
+import random
 import types
 
-from tqdm import tqdm
 import numpy as np
+from tqdm import tqdm
 
 from .. import config, logger
 from ..animation.animation import Animation, Wait, prepare_animation
-from ..animation.transform import MoveToTarget, _MethodAnimation
 from ..camera.camera import Camera
 from ..constants import *
 from ..container import Container
-from ..mobject.mobject import Mobject, _AnimationBuilder
 from ..mobject.opengl_mobject import OpenGLPoint
-from ..utils.iterables import list_update, list_difference_update
-from ..utils.family import extract_mobject_family_members
 from ..renderer.cairo_renderer import CairoRenderer
 from ..utils.exceptions import EndSceneEarlyException
+from ..utils.family import extract_mobject_family_members
 from ..utils.family_ops import restructure_list_to_exclude_certain_family_members
 from ..utils.file_ops import open_media_file
+from ..utils.iterables import list_difference_update, list_update
 from ..utils.space_ops import rotate_vector
 
 
@@ -69,7 +65,7 @@ class Scene(Container):
         renderer=None,
         camera_class=Camera,
         always_update_mobjects=False,
-        random_seed=0,
+        random_seed=None,
         **kwargs,
     ):
         self.camera_class = camera_class
@@ -187,9 +183,11 @@ class Scene(Container):
         # We have to reset these settings in case of multiple renders.
         self.renderer.scene_finished(self)
 
-        logger.info(
-            f"Rendered {str(self)}\nPlayed {self.renderer.num_plays} animations"
-        )
+        # Show info only if animations are rendered or to get image
+        if self.renderer.num_plays or config["save_last_frame"] or config["save_pngs"]:
+            logger.info(
+                f"Rendered {str(self)}\nPlayed {self.renderer.num_plays} animations"
+            )
 
         # If preview open up the render after rendering.
         if preview:
